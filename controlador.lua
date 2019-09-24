@@ -91,17 +91,17 @@ end
 function redraw()
     screen.clear()
 
-    screen.move(4, 8)
+    screen.move(4, 16)
     if is_note_on then
         screen.text("NOTE ON")
     else
         screen.text("NOTE OFF")
     end
-    screen.move(4, 16)
+    screen.move(4, 24)
     screen.text("NOTE  " .. params:get("note_number"))
-    screen.move(48, 16)
+    screen.move(48, 24)
     screen.text("VEL  " .. params:get("note_velocity"))
-    screen.move(94, 16)
+    screen.move(94, 24)
     screen.text("CH  " .. params:get("note_channel"))
 
     screen.move(4, 40)
