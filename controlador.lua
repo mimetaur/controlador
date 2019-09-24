@@ -33,7 +33,7 @@ function init()
         max = 127,
         default = 100
     }
-
+    params:add_seperator()
     params:add {
         type = "option",
         id = "ctrl_enc",
