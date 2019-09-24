@@ -1,0 +1,3 @@
+Controller sketch for Monome Norns.
+
+I needed a tool for manual gates and CV control of my ER-301 and other synth modules.
