@@ -88,13 +88,13 @@ function redraw()
     screen.text("CH  " .. params:get("note_channel"))
 
     screen.move(4, 40)
-    screen.text(ctrl.enc)
+    screen.text(params:string("ctrl_enc"))
     screen.move(4, 48)
-    screen.text("CTRL  " .. ctrl.num)
+    screen.text("CTRL  " .. params:get("ctrl_number"))
     screen.move(48, 48)
-    screen.text("VAL  " .. ctrl.val)
+    screen.text("VAL  " .. params:get("ctrl_value"))
     screen.move(94, 48)
-    screen.text("CH " .. ctrl.ch)
+    screen.text("CH " .. params:get("ctrl_channel"))
 
     screen.update()
 end
