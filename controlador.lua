@@ -1,18 +1,17 @@
 -- controlador
 -- manual midi controller
 
+-- KEY2 holds down a note
+-- ENC2 controls a CC controller
+
+-- set up velocity, channels, etc
+-- in the params menu
+
 local is_note_on = false
+local midi_out
 
 function init()
-    m = midi.connect()
-
-    params:add {
-        type = "option",
-        id = "note_key",
-        name = "note key",
-        options = {"KEY 2", "KEY 3"},
-        default = 1
-    }
+    midi_out = midi.connect()
     params:add {
         type = "number",
         id = "note_channel",
@@ -37,14 +36,9 @@ function init()
         max = 127,
         default = 100
     }
+
     params:add_separator()
-    params:add {
-        type = "option",
-        id = "ctrl_enc",
-        name = "control enc",
-        options = {"ENC 2", "ENC 3"},
-        default = 1
-    }
+
     params:add {
         type = "number",
         id = "ctrl_channel",
@@ -72,8 +66,7 @@ function init()
 end
 
 function enc(n, d)
-    local ctrl_enc_num = params:get("ctrl_enc") + 1
-    if ctrl_enc_num == n then
+    if ctrl_enc_num == 2 then
         -- do some stuff
         print("Doing some stuff with encoder " .. n)
     end
@@ -82,18 +75,12 @@ function enc(n, d)
 end
 
 function key(n, z)
-    local note_key_num = params:get("note_key") + 1
-    if note_key_num == n then
-        print("Doing some stuff with key " .. n)
-        local note = {}
-        note.num = params:get("note_number")
-        note.vel = params:get("note_velocity")
-        note.ch = params:get("note_channel")
+    if n == 2 then
         if (z == 1) then
-            m.note_on(note.num, note.vel, note.ch)
+            midi_out:note_on(params:get("note_number"), params:get("note_velocity"), params:get("note_channel"))
             is_note_on = true
         else
-            m.note_off(note.num, 0, note.ch)
+            midi_out:note_off(params:get("note_number"), 0, params:get("note_channel"))
             is_note_on = false
         end
     end
@@ -104,26 +91,24 @@ end
 function redraw()
     screen.clear()
 
-    screen.move(4, 16)
-    screen.text(params:string("note_key"))
+    screen.move(4, 8)
     if is_note_on then
-        screen.move(48, 16)
         screen.text("NOTE ON")
+    else
+        screen.text("NOTE OFF")
     end
-    screen.move(4, 24)
+    screen.move(4, 16)
     screen.text("NOTE  " .. params:get("note_number"))
-    screen.move(48, 24)
+    screen.move(48, 16)
     screen.text("VEL  " .. params:get("note_velocity"))
-    screen.move(94, 24)
+    screen.move(94, 16)
     screen.text("CH  " .. params:get("note_channel"))
 
     screen.move(4, 40)
-    screen.text(params:string("ctrl_enc"))
-    screen.move(4, 48)
     screen.text("CTRL  " .. params:get("ctrl_number"))
-    screen.move(48, 48)
+    screen.move(48, 40)
     screen.text("VAL  " .. params:get("ctrl_value"))
-    screen.move(94, 48)
+    screen.move(94, 40)
     screen.text("CH " .. params:get("ctrl_channel"))
 
     screen.update()
