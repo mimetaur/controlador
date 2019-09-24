@@ -1,21 +1,6 @@
 -- controlador
 -- manual midi controller
 
-local options = {}
-options.encoders = {"ENC 2", "ENC 3"}
-
-local note = {}
-note.key = "KEY2"
-note.num = 60
-note.vel = 100
-note.ch = 1
-
-local ctrl = {}
-ctrl.enc = "ENC2"
-ctrl.num = 1
-ctrl.val = 0
-ctrl.ch = 1
-
 function init()
     params:add {
         type = "option",
@@ -47,6 +32,38 @@ function init()
         min = 0,
         max = 127,
         default = 100
+    }
+
+    params:add {
+        type = "option",
+        id = "ctrl_enc",
+        name = "control enc",
+        options = {"ENC 2", "ENC 3"},
+        default = 1
+    }
+    params:add {
+        type = "number",
+        id = "ctrl_channel",
+        name = "controller ch",
+        min = 1,
+        max = 16,
+        default = 1
+    }
+    params:add {
+        type = "number",
+        id = "ctrl_number",
+        name = "controller #",
+        min = 0,
+        max = 127,
+        default = 0
+    }
+    params:add {
+        type = "number",
+        id = "ctrl_value",
+        name = "controller value",
+        min = 0,
+        max = 127,
+        default = 0
     }
 end
 
