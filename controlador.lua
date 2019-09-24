@@ -1,11 +1,53 @@
 -- controlador
 -- manual midi controller
 
-local note_num = 60
-local note_vel = 100
-local note_ch = 1
+local options = {}
+options.encoders = {"ENC 2", "ENC 3"}
+
+local note = {}
+note.key = "KEY2"
+note.num = 60
+note.vel = 100
+note.ch = 1
+
+local ctrl = {}
+ctrl.enc = "ENC2"
+ctrl.num = 1
+ctrl.val = 0
+ctrl.ch = 1
 
 function init()
+    params:add {
+        type = "option",
+        id = "note_key",
+        name = "note key",
+        options = {"KEY 2", "KEY 3"},
+        default = 1
+    }
+    params:add {
+        type = "number",
+        id = "note_channel",
+        name = "note channel",
+        min = 1,
+        max = 16,
+        default = 1
+    }
+    params:add {
+        type = "number",
+        id = "note_number",
+        name = "note number",
+        min = 21,
+        max = 108,
+        default = 60
+    }
+    params:add {
+        type = "number",
+        id = "note_velocity",
+        name = "note velocity",
+        min = 0,
+        max = 127,
+        default = 100
+    }
 end
 
 function enc(n, d)
@@ -19,19 +61,23 @@ end
 function redraw()
     screen.clear()
 
-    screen.move(16, 16)
-    local note_text = "NOTE  " .. note_num
-    screen.text(note_text)
-    screen.move(60, 16)
-    local vel_text = "VEL  " .. note_vel
-    screen.text(vel_text)
+    screen.move(4, 16)
+    screen.text(params:string("note_key"))
+    screen.move(4, 24)
+    screen.text("NOTE  " .. params:get("note_number"))
+    screen.move(48, 24)
+    screen.text("VEL  " .. params:get("note_velocity"))
+    screen.move(94, 24)
+    screen.text("CH  " .. params:get("note_channel"))
 
-    screen.move(16, 44)
-    local cc_num_text = "CTRL  " .. cc_num
-    screen.text(cc_num_text)
-    screen.move(60, 44)
-    local cc_val_text = "VAL  " .. cc_val
-    screen.text(cc_val_text)
+    screen.move(4, 40)
+    screen.text(ctrl.enc)
+    screen.move(4, 48)
+    screen.text("CTRL  " .. ctrl.num)
+    screen.move(48, 48)
+    screen.text("VAL  " .. ctrl.val)
+    screen.move(94, 48)
+    screen.text("CH " .. ctrl.ch)
 
     screen.update()
 end
