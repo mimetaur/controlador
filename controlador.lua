@@ -1,7 +1,11 @@
 -- controlador
 -- manual midi controller
 
+local is_note_on = false
+
 function init()
+    m = midi.connect()
+
     params:add {
         type = "option",
         id = "note_key",
@@ -81,6 +85,17 @@ function key(n, z)
     local note_key_num = params:get("note_key") + 1
     if note_key_num == n then
         print("Doing some stuff with key " .. n)
+        local note = {}
+        note.num = params:get("note_number")
+        note.vel = params:get("note_velocity")
+        note.ch = params:get("note_channel")
+        if (z == 1) then
+            m.note_on(note.num, note.vel, note.ch)
+            is_note_on = true
+        else
+            m.note_off(note.num, 0, note.ch)
+            is_note_on = false
+        end
     end
 
     redraw()
@@ -91,6 +106,10 @@ function redraw()
 
     screen.move(4, 16)
     screen.text(params:string("note_key"))
+    if is_note_on then
+        screen.move(48, 16)
+        screen.text("NOTE ON")
+    end
     screen.move(4, 24)
     screen.text("NOTE  " .. params:get("note_number"))
     screen.move(48, 24)
