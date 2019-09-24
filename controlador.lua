@@ -68,10 +68,21 @@ function init()
 end
 
 function enc(n, d)
+    local ctrl_enc_num = params:get("ctrl_enc") + 1
+    if ctrl_enc_num == n then
+        -- do some stuff
+        print("Doing some stuff with encoder " .. n)
+    end
+
     redraw()
 end
 
 function key(n, z)
+    local note_key_num = params:get("note_key") + 1
+    if note_key_num == n then
+        print("Doing some stuff with key " .. n)
+    end
+
     redraw()
 end
 
