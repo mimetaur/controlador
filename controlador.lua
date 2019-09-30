@@ -3,12 +3,16 @@
 
 -- KEY2 toggles/holds a note
 -- ENC2 controls a CC controller
+-- KEY2 and KEY3 trigger ALL NOTES OFF
 
 -- set up velocity, channels, etc
 -- in the params menu
 
 local midi_out = midi.connect()
 local is_note_on = false
+
+local key2_held = false
+local key3_held = false
 
 function init()
     params:add {
@@ -71,14 +75,26 @@ function init()
     }
 end
 
-local function midi_note_on()
-    midi_out:note_on(params:get("note_number"), params:get("note_velocity"), params:get("note_channel"))
+local function midi_note_on(note_num, note_vel, note_chan)
+    note_num = note_num or params:get("note_number")
+    note_vel = note_vel or params:get("note_velocity")
+    note_chan = note_chan or params:get("note_channel")
+    midi_out:note_on(note_num, note_vel, note_chan)
     is_note_on = true
 end
 
-local function midi_note_off()
-    midi_out:note_off(params:get("note_number"), 0, params:get("note_channel"))
+local function midi_note_off(note_num, note_chan)
+    note_num = note_num or params:get("note_number")
+    note_chan = note_chan or params:get("note_channel")
+    midi_out:note_off(note_num, note_vel, note_chan)
     is_note_on = false
+end
+
+local function all_notes_off()
+    print("all notes off!")
+    for note_num = 21, 80 do
+        midi_note_off(note_num)
+    end
 end
 
 function enc(n, d)
@@ -91,22 +107,44 @@ function enc(n, d)
 end
 
 function key(n, z)
-    if n == 2 then
-        if (params:get("key_mode") == 1) then
-            if (z == 1) then
+    local is_toggle_mode = (params:get("key_mode") == 1)
+    local is_button_down = (z == 1)
+    local is_key2 = (n == 2)
+    local is_key3 = (n == 3)
+
+    if is_key2 then
+        if (is_button_down) then
+            key2_held = true
+        else
+            key2_held = false
+        end
+        if (is_toggle_mode) then
+            if (is_button_down) then
                 if (is_note_on) then
                     midi_note_off()
                 else
-                    midi_note_on()
+                    if (not key3_held) then
+                        midi_note_on()
+                    end
                 end
             end
         else
-            if (z == 1) then
+            if (is_button_down and not key3_held) then
                 midi_note_on()
             else
                 midi_note_off()
             end
         end
+    end
+    if is_key3 then
+        if (is_button_down) then
+            key3_held = true
+        else
+            key3_held = false
+        end
+    end
+    if (key2_held and key3_held) then
+        all_notes_off()
     end
     redraw()
 end
