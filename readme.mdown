@@ -3,3 +3,14 @@ Controller sketch for Monome Norns.
 I needed a tool for manual gates and CV control of my ER-301 and other synth modules.
 
 Sometimes you only have your Norns around, and you don't want a fancy sequencer. All I wanted was to generate notes and CC's by hand, with relative precision, while I worked on sound design.
+
+`KEY2` toggles/holds a note
+`ENC2` controls a CC controller
+
+Holding `KEY2` and `KEY3` together trigger **all notes off**
+
+Use the params menu for:
+* note #
+* channel #
+* CC #
+* and so on
