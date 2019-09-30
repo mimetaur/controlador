@@ -1,4 +1,4 @@
--- controlador
+-- onehanded
 -- manual midi controller
 --
 -- KEY2 toggles/holds a note
