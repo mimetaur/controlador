@@ -36,6 +36,7 @@ local function midi_note_off(num, chan)
     chan = chan or params:get("note_channel")
 
     midi_out:note_off(num, vel, chan)
+
     is_note_on = false
 end
 
