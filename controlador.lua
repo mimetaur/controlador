@@ -3,16 +3,47 @@
 
 -- KEY2 toggles/holds a note
 -- ENC2 controls a CC controller
--- KEY2 and KEY3 trigger ALL NOTES OFF
+-- KEY2 and KEY3 together trigger ALL NOTES OFF
 
 -- set up velocity, channels, etc
 -- in the params menu
 
+-- midi device
 local midi_out = midi.connect()
-local is_note_on = false
 
+-- global state
+local is_note_on = false
 local key2_held = false
 local key3_held = false
+
+-- local functions
+local function midi_note_on(num, vel, chan)
+    num = num or params:get("note_number")
+    vel = vel or params:get("note_velocity")
+    chan = chan or params:get("note_channel")
+    midi_out:note_on(num, vel, chan)
+    is_note_on = true
+end
+
+local function midi_note_off(num, chan)
+    num = num or params:get("note_number")
+    vel = 0 -- velocity is always 0 on note off
+    chan = chan or params:get("note_channel")
+
+    midi_out:note_off(num, vel, chan)
+    is_note_on = false
+end
+
+local function all_notes_off()
+    print("all notes off!")
+    for note_num = 21, 80 do
+        midi_note_off(note_num)
+    end
+end
+
+local function send_midi_cc(value)
+    midi_out:cc(params:get("ctrl_number"), value, params:get("ctrl_channel"))
+end
 
 function init()
     params:add {
@@ -71,36 +102,17 @@ function init()
         name = "controller value",
         min = 0,
         max = 127,
-        default = 0
+        default = 0,
+        action = function(value)
+            send_midi_cc(value)
+        end
     }
 end
 
-local function midi_note_on(note_num, note_vel, note_chan)
-    note_num = note_num or params:get("note_number")
-    note_vel = note_vel or params:get("note_velocity")
-    note_chan = note_chan or params:get("note_channel")
-    midi_out:note_on(note_num, note_vel, note_chan)
-    is_note_on = true
-end
-
-local function midi_note_off(note_num, note_chan)
-    note_num = note_num or params:get("note_number")
-    note_chan = note_chan or params:get("note_channel")
-    midi_out:note_off(note_num, note_vel, note_chan)
-    is_note_on = false
-end
-
-local function all_notes_off()
-    print("all notes off!")
-    for note_num = 21, 80 do
-        midi_note_off(note_num)
-    end
-end
-
 function enc(n, d)
-    if ctrl_enc_num == 2 then
+    if n == 2 then
         -- do some stuff
-        print("Doing some stuff with encoder " .. n)
+        params:delta("ctrl_value", d)
     end
 
     redraw()
