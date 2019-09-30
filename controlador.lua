@@ -1,12 +1,17 @@
 -- controlador
 -- manual midi controller
-
+--
 -- KEY2 toggles/holds a note
 -- ENC2 controls a CC controller
--- KEY2 and KEY3 together trigger ALL NOTES OFF
-
--- set up velocity, channels, etc
--- in the params menu
+--
+-- KEY2 and KEY3 together
+-- are ALL NOTES OFF
+--
+-- use params menu for:
+-- note #
+-- channel #
+-- CC #
+-- and so on
 
 -- midi device
 local midi_out = midi.connect()
@@ -94,7 +99,7 @@ function init()
         name = "CC #",
         min = 0,
         max = 127,
-        default = 0
+        default = 2
     }
     params:add {
         type = "number",
@@ -107,11 +112,11 @@ function init()
             send_midi_cc(value)
         end
     }
+    params:bang()
 end
 
 function enc(n, d)
     if n == 2 then
-        -- do some stuff
         params:delta("cc_val", d)
     end
 
@@ -169,21 +174,21 @@ function redraw()
         screen.circle(2, 5, 2)
         screen.fill()
     else
-        screen.level(6)
+        screen.level(5)
     end
-    screen.move(6, 8)
+    screen.move(6, 12)
     screen.text("NOTE  " .. params:get("note_number"))
-    screen.move(50, 8)
+    screen.move(50, 12)
     screen.text("VEL  " .. params:get("note_velocity"))
-    screen.move(96, 8)
+    screen.move(96, 12)
     screen.text("CH  " .. params:get("note_channel"))
 
-    screen.level(10)
-    screen.move(6, 34)
+    screen.level(8)
+    screen.move(6, 38)
     screen.text("CTRL  " .. params:get("cc_number"))
-    screen.move(50, 34)
+    screen.move(50, 38)
     screen.text("VAL  " .. params:get("cc_val"))
-    screen.move(96, 34)
+    screen.move(96, 38)
     screen.text("CH  " .. params:get("cc_channel"))
 
     screen.update()
