@@ -171,7 +171,7 @@ function redraw()
 
     if is_note_on then
         screen.level(12)
-        screen.circle(2, 5, 2)
+        screen.circle(2, 9, 2)
         screen.fill()
     else
         screen.level(5)
