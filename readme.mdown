@@ -1,3 +1,5 @@
 Controller sketch for Monome Norns.
 
 I needed a tool for manual gates and CV control of my ER-301 and other synth modules.
+
+Sometimes you only have your Norns around, and you don't want a fancy sequencer. All I wanted was to generate notes and CC's by hand, with relative precision, while I worked on sound design.
