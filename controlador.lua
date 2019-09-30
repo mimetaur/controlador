@@ -42,7 +42,7 @@ local function all_notes_off()
 end
 
 local function send_midi_cc(value)
-    midi_out:cc(params:get("ctrl_number"), value, params:get("ctrl_channel"))
+    midi_out:cc(params:get("cc_number"), value, params:get("cc_channel"))
 end
 
 function init()
@@ -82,24 +82,24 @@ function init()
 
     params:add {
         type = "number",
-        id = "ctrl_channel",
-        name = "controller ch",
+        id = "cc_channel",
+        name = "CC channel",
         min = 1,
         max = 16,
         default = 1
     }
     params:add {
         type = "number",
-        id = "ctrl_number",
-        name = "controller #",
+        id = "cc_number",
+        name = "CC #",
         min = 0,
         max = 127,
         default = 0
     }
     params:add {
         type = "number",
-        id = "ctrl_value",
-        name = "controller value",
+        id = "cc_val",
+        name = "CC value",
         min = 0,
         max = 127,
         default = 0,
@@ -112,7 +112,7 @@ end
 function enc(n, d)
     if n == 2 then
         -- do some stuff
-        params:delta("ctrl_value", d)
+        params:delta("cc_val", d)
     end
 
     redraw()
@@ -180,11 +180,11 @@ function redraw()
 
     screen.level(10)
     screen.move(6, 34)
-    screen.text("CTRL  " .. params:get("ctrl_number"))
+    screen.text("CTRL  " .. params:get("cc_number"))
     screen.move(50, 34)
-    screen.text("VAL  " .. params:get("ctrl_value"))
+    screen.text("VAL  " .. params:get("cc_val"))
     screen.move(96, 34)
-    screen.text("CH  " .. params:get("ctrl_channel"))
+    screen.text("CH  " .. params:get("cc_channel"))
 
     screen.update()
 end
