@@ -20,6 +20,8 @@ local midi_out = midi.connect()
 local is_note_on = false
 local key2_held = false
 local key3_held = false
+local is_cc_on = false
+local cc_clearer = {}
 
 -- local functions
 local function midi_note_on(num, vel, chan)
@@ -49,6 +51,11 @@ end
 
 local function send_midi_cc(value)
     midi_out:cc(params:get("cc_number"), value, params:get("cc_channel"))
+end
+
+local function clear_cc()
+    is_cc_on = false
+    redraw()
 end
 
 function init()
@@ -114,11 +121,22 @@ function init()
         end
     }
     params:bang()
+
+    -- every second, we make sure the circle
+    -- next to the CC line is removed
+    -- the encoder needs to be moved
+    -- to turn it back on
+    cc_clearer = metro.init()
+    cc_clearer.time = 4
+    cc_clearer.count = -1
+    cc_clearer.event = clear_cc
+    cc_clearer:start()
 end
 
 function enc(n, d)
     if n == 2 then
         params:delta("cc_val", d)
+        is_cc_on = true
     end
 
     redraw()
@@ -191,7 +209,13 @@ function redraw()
     screen.move(96, 36)
     screen.text("ch #  " .. params:get("note_channel"))
 
-    screen.level(8)
+    if is_cc_on then
+        screen.level(12)
+        screen.circle(2, 46, 2)
+        screen.fill()
+    else
+        screen.level(5)
+    end
     screen.move(6, 48)
     screen.text("cc #  " .. params:get("cc_number"))
     screen.move(50, 48)
