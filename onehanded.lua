@@ -127,16 +127,16 @@ function init()
     -- the encoder needs to be moved
     -- to turn it back on
     cc_clearer = metro.init()
-    cc_clearer.time = 4
-    cc_clearer.count = -1
+    cc_clearer.time = 1
+    cc_clearer.count = 1
     cc_clearer.event = clear_cc
-    cc_clearer:start()
 end
 
 function enc(n, d)
     if n == 2 then
         params:delta("cc_val", d)
         is_cc_on = true
+        cc_clearer:start()
     end
 
     redraw()
@@ -191,6 +191,7 @@ function redraw()
     screen.level(9)
     screen.move(6, 12)
     screen.text("one")
+
     screen.move(21, 12)
     screen.level(6)
     screen.text("handed")

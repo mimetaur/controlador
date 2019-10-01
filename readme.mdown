@@ -1,16 +1,15 @@
-Controller sketch for Monome Norns.
+Manual controller script for Monome Norns.
 
-I needed a tool for manual gates and CV control of my ER-301 and other synth modules.
+![Example Onehanded UI](onehanded.png)
 
-Sometimes you only have your Norns around, and you don't want a fancy sequencer. All I wanted was to generate notes and CC's by hand, with relative precision, while I worked on sound design.
+Sometimes you only have your Norns around, and you don't want a fancy sequencer. All I wanted was to generate a note and a CC by hand, with relative precision, while I designed sounds on my modular, particularly my ER-301 which doesn't have any controls of its own.
 
 `KEY2` toggles/holds a note
 `ENC2` controls a CC controller
 
 Holding `KEY2` and `KEY3` together trigger **all notes off**
 
-Use the params menu for:
+Use the params menu to configure the:
 * note #
-* channel #
 * CC #
-* and so on
+* channel #'s
