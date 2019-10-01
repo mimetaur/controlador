@@ -170,27 +170,34 @@ end
 function redraw()
     screen.clear()
 
+    screen.level(9)
+    screen.move(6, 12)
+    screen.text("one")
+    screen.move(21, 12)
+    screen.level(6)
+    screen.text("handed")
+
     if is_note_on then
         screen.level(12)
-        screen.circle(2, 9, 2)
+        screen.circle(2, 34, 2)
         screen.fill()
     else
         screen.level(5)
     end
-    screen.move(6, 12)
-    screen.text("NOTE  " .. params:get("note_number"))
-    screen.move(50, 12)
-    screen.text("VEL  " .. params:get("note_velocity"))
-    screen.move(96, 12)
-    screen.text("CH  " .. params:get("note_channel"))
+    screen.move(6, 36)
+    screen.text("note  " .. params:get("note_number"))
+    screen.move(50, 36)
+    screen.text("vel  " .. params:get("note_velocity"))
+    screen.move(96, 36)
+    screen.text("ch #  " .. params:get("note_channel"))
 
     screen.level(8)
-    screen.move(6, 38)
-    screen.text("CTRL  " .. params:get("cc_number"))
-    screen.move(50, 38)
-    screen.text("VAL  " .. params:get("cc_val"))
-    screen.move(96, 38)
-    screen.text("CH  " .. params:get("cc_channel"))
+    screen.move(6, 48)
+    screen.text("cc #  " .. params:get("cc_number"))
+    screen.move(50, 48)
+    screen.text("val  " .. params:get("cc_val"))
+    screen.move(96, 48)
+    screen.text("ch #  " .. params:get("cc_channel"))
 
     screen.update()
 end
